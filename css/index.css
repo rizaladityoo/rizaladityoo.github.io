@@ -42,7 +42,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url('D:/github/portfolio/rizaladityoo.github.io/assets/img/portfolio/panorama.jpg');
+    background-image: url('../assets/img/portfolio/panorama.jpg');
 }
 
 .parallax-header::before {
