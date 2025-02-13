@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Saya</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset dan Base Styles dengan namespace */
+        .portfolio {
+            --portfolio-primary: #3498db;
+            --portfolio-secondary: #2c3e50;
+            --portfolio-bg-light: #ffffff;
+            --portfolio-bg-dark: #1a1a1a;
+            --portfolio-text-light: #333333;
+            --portfolio-text-dark: #ffffff;
+            color: var(--portfolio-text-primary);
+        }
+
+        .portfolio * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Theme Variables */
+        .portfolio[data-theme="dark"] {
+            --portfolio-bg-primary: var(--portfolio-bg-dark);
+            --portfolio-bg-secondary: #2d2d2d;
+            --portfolio-text-primary: var(--portfolio-text-dark);
+            --portfolio-text-secondary: #e0e0e0;
+        }
+
+        .portfolio[data-theme="light"] {
+            --portfolio-bg-primary: var(--portfolio-bg-light);
+            --portfolio-bg-secondary: #f9f9f9;
+            --portfolio-text-primary: var(--portfolio-text-light);
+            --portfolio-text-secondary: #666666;
+        }
+
+        /* Header */
+        .portfolio__header {
+            height: 100vh;
+            position: relative;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-image: url('/api/placeholder/1920/1080');
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portfolio__header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .portfolio__header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .portfolio__header-title {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: portfolioFadeInUp 1s ease;
+        }
+
+        .portfolio__header-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            animation: portfolioFadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        /* Navigation */
+        .portfolio__nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: rgba(44, 62, 80, 0.95);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio__nav--scrolled {
+            padding: 0.5rem 0;
+            background-color: rgba(44, 62, 80, 0.98);
+        }
+
+        .portfolio__nav-list {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .portfolio__nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio__nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sections */
+        .portfolio__section {
+            padding: 6rem 2rem;
+        }
+
+        .portfolio__container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .portfolio__section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .portfolio__section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--portfolio-primary);
+        }
+
+        /* About Section */
+        .portfolio__about {
+            background-color: var(--portfolio-bg-secondary);
+        }
+
+        .portfolio__about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .portfolio__about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .portfolio__about-image img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio__about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .portfolio__about-text {
+            line-height: 1.8;
+        }
+
+        /* Skills Section */
+        .portfolio__skills {
+            background-color: var(--portfolio-bg-primary);
+        }
+
+        .portfolio__skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio__skill-card {
+            background: var(--portfolio-bg-secondary);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .portfolio__skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .portfolio__skill-bar {
+            height: 10px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .portfolio__skill-progress {
+            height: 100%;
+            background: var(--portfolio-primary);
+            border-radius: 5px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 1s ease;
+        }
+
+        /* Projects Section */
+        .portfolio__projects {
+            background-color: var(--portfolio-bg-secondary);
+        }
+
+        .portfolio__projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio__project-card {
+            background: var(--portfolio-bg-primary);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio__project-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .portfolio__project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .portfolio__project-content {
+            padding: 1.5rem;
+        }
+
+        .portfolio__project-title {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Contact Section */
+        .portfolio__contact {
+            background: linear-gradient(135deg, var(--portfolio-secondary), var(--portfolio-primary));
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .portfolio__contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .portfolio__contact-link {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border: 2px solid #ffffff;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio__contact-link:hover {
+            background: #ffffff;
+            color: var(--portfolio-primary);
+        }
+
+        /* Theme Toggle */
+        .portfolio__theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--portfolio-primary);
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio__theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        .portfolio__footer {
+            background-color: var(--portfolio-secondary);
+            color: #ffffff;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Animations */
+        @keyframes portfolioFadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .portfolio__animate {
+            opacity: 0;
+            animation: portfolioFadeInUp 0.8s ease forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .portfolio__header-title {
+                font-size: 2.5rem;
+            }
+
+            .portfolio__nav-list {
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            .portfolio__about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .portfolio__contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portfolio" data-theme="light">
+        <!-- Navigation -->
+        <nav class="portfolio__nav">
+            <ul class="portfolio__nav-list">
+                <li><a href="#home" class="portfolio__nav-link">Beranda</a></li>
+                <li><a href="#about" class="portfolio__nav-link">Tentang</a></li>
+                <li><a href="#skills" class="portfolio__nav-link">Keahlian</a></li>
+                <li><a href="#projects" class="portfolio__nav-link">Proyek</a></li>
+                <li><a href="#contact" class="portfolio__nav-link">Kontak</a></li>
+            </ul>
+        </nav>
+
+        <!-- Header -->
+        <header id="home" class="portfolio__header">
+            <div class="portfolio__header-overlay"></div>
+            <div class="portfolio__header-content">
+                <h1 class="portfolio__header-title">Nama Anda</h1>
+                <p class="portfolio__header-subtitle">Web Developer | Designer | Creative Thinker</p>
+            </div>
+        </header>
+
+        <!-- About Section -->
+        <section id="about" class="portfolio__section portfolio__about">
+            <div class="portfolio__container">
+                <h2 class="portfolio__section-title">Tentang Saya</h2>
+                <div class="portfolio__about-content">
+                    <div class="portfolio__about-image">
+                        <img src="/api/placeholder/400/400" alt="Foto profil">
+                    </div>
+                    <div class="portfolio__about-text">
+                        <p>Selamat datang di portfolio saya! Saya adalah seorang pengembang web yang bersemangat dalam menciptakan pengalaman digital yang menarik dan fungsional.</p>
+                        <p>Dengan pengalaman dalam berbagai teknologi web modern, saya selalu berusaha untuk memberikan solusi terbaik untuk setiap proyek. Saya percaya bahwa desain yang baik harus menyeimbangkan estetika dengan fungsi.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="portfolio__section portfolio__skills">
+            <div class="portfolio__container">
+                <h2 class="portfolio__section-title">Keahlian</h2>
+                <div class="portfolio__skills-grid">
+                    <div class="portfolio__skill-card">
+                        <div class="portfolio__skill-name">
+                            <span>HTML & CSS</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="portfolio__skill-bar">
+                            <div class="portfolio__skill-progress" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="portfolio__skill-card">
+                        <div class="portfolio__skill-name">
+                            <span>JavaScript</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="portfolio__skill-bar">
+                            <div class="portfolio__skill-progress" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="portfolio__skill-card">
+                        <div class="portfolio__skill-name">
+                            <span>React</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="portfolio__skill-bar">
+                            <div class="portfolio__skill-progress" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="portfolio__section portfolio__projects">
+            <div class="portfolio__container">
+                <h2 class="portfolio__section-title">Proyek</h2>
+                <div class="portfolio__projects-grid">
+                    <div class="portfolio__project-card">
+                        <img src="/api/placeholder/400/300" alt="Proyek 1" class="portfolio__project-image">
+                        <div class="portfolio__project-content">
+                            <h3 class="portfolio__project-title">Proyek 1</h3>
+                            <p>Deskripsi singkat tentang proyek dan teknologi yang digunakan.</p>
+                        </div>
+                    </div>
+                    <div class="portfolio__project-card">
+                        <img src="/api/placeholder/400/300" alt="Proyek 2" class="portfolio__project-image">
+                        <div class="portfolio__project-content">
+                            <h3 class="portfolio__project-title">Proyek 2</h3>
+                            <p>Deskripsi singkat tentang proyek dan teknologi yang digunakan.</p>
+                        </div>
+                    </div>
+                    <div class="portfolio__project-card">
+                        <img src="/api/placeholder/400/300" alt="Proyek 2" class="portfolio__project-image">
+                        <div class="portfolio__project-content">
+                            <h3 class="portfolio__project-title">Proyek 2</h3>
+                            <p>Deskripsi singkat tentang proyek dan teknologi yang digunakan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </section>
+
+        <!-- Contact Section -->
+
+    </div>
+</body>
+<script>
+    const PortfolioApp = {
+    // State Management
+    state: {
+        theme: 'light',
+        isLoading: true,
+        activeFilter: 'all',
+        skillsAnimated: false
+    },
+
+    // Initialization
+    init() {
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            this.initializeLoading();
+            this.initializeTheme();
+            this.initializeNavigation();
+            this.initializeSkillsAnimation();
+            this.initializeProjectFilters();
+            this.initializeScrollAnimations();
+            this.initializeBackToTop();
+            this.initializeContactForm();
+            this.initializeParallax();
+        });
+    },
+
+    // Loading Screen
+    initializeLoading() {
+        window.addEventListener('load', () => {
+            const loader = document.querySelector('.loader-wrapper');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    this.state.isLoading = false;
+                }, 500);
+            }
+        });
+    },
+
+    // Theme Switcher
+    initializeTheme() {
+        const themeToggle = document.querySelector('.theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const html = document.documentElement;
+                const icon = themeToggle.querySelector('i');
+                
+                if (this.state.theme === 'light') {
+                    html.setAttribute('data-theme', 'dark');
+                    icon.classList.replace('fa-moon', 'fa-sun');
+                    this.state.theme = 'dark';
+                } else {
+                    html.setAttribute('data-theme', 'light');
+                    icon.classList.replace('fa-sun', 'fa-moon');
+                    this.state.theme = 'light';
+                }
+                
+                localStorage.setItem('portfolio-theme', this.state.theme);
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('portfolio-theme');
+            if (savedTheme) {
+                this.state.theme = savedTheme;
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                const icon = themeToggle.querySelector('i');
+                icon.classList.replace(
+                    savedTheme === 'light' ? 'fa-sun' : 'fa-moon',
+                    savedTheme === 'light' ? 'fa-moon' : 'fa-sun'
+                );
+            }
+        }
+    },
+
+    // Navigation
+    initializeNavigation() {
+        const nav = document.querySelector('.portfolio__nav');
+        if (nav) {
+            // Smooth scroll for navigation links
+            nav.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = document.querySelector(link.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Navigation scroll effect
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+        }
+    },
+
+    // Skills Animation
+    initializeSkillsAnimation() {
+        const skillBars = document.querySelectorAll('.skill-progress');
+        const observerSkills = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !this.state.skillsAnimated) {
+                    const percentage = entry.target.getAttribute('data-percentage');
+                    entry.target.style.transform = `scaleX(${percentage / 100})`;
+                    this.state.skillsAnimated = true;
+                }
+            });
+        }, { threshold: 0.5 });
+
+        skillBars.forEach(bar => observerSkills.observe(bar));
+    },
+
+    // Project Filters
+    initializeProjectFilters() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const projects = document.querySelectorAll('.project-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+                this.state.activeFilter = filter;
+
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Filter projects
+                projects.forEach(project => {
+                    const projectCategory = project.getAttribute('data-category');
+                    if (filter === 'all' || projectCategory === filter) {
+                        project.style.display = 'block';
+                        setTimeout(() => project.classList.add('visible'), 10);
+                    } else {
+                        project.classList.remove('visible');
+                        setTimeout(() => project.style.display = 'none', 300);
+                    }
+                });
+            });
+        });
+    },
+
+    // Scroll Animations
+    initializeScrollAnimations() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        // Reveal animation for elements
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Timeline animation
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    timelineObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-item').forEach(el => {
+            timelineObserver.observe(el);
+        });
+    },
+
+    // Back to Top Button
+    initializeBackToTop() {
+        const backToTop = document.querySelector('.back-to-top');
+        if (backToTop) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+    },
+
+    // Contact Form
+    initializeContactForm() {
+        const form = document.querySelector('.contact-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Add your form submission logic here
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                
+                // Example: Send data to server
+                console.log('Form submitted:', data);
+                
+                // Show success message
+                this.showNotification('Pesan telah terkirim!', 'success');
+            });
+        }
+    },
+
+    // Parallax Effect
+    initializeParallax() {
+        const parallaxElements = document.querySelectorAll('.parallax');
+        window.addEventListener('scroll', () => {
+            parallaxElements.forEach(element => {
+                const speed = element.getAttribute('data-speed') || 0.5;
+                const yPos = -(window.scrollY * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+    },
+
+    // Utility Functions
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification--${type}`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    },
+
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+};
+
+// Initialize the app
+PortfolioApp.init();
+
+// Export for module usage
+export default PortfolioApp;
+</script>
+</html>
+
+

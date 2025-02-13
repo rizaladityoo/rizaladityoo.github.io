@@ -1,0 +1,61 @@
+/* Isolasi CSS chatgpt1 */
+#chatgpt1-wrapper {
+    all: revert; /* Lebih aman daripada initial */
+    display: block;
+    width: 100%;
+}
+
+/* Mencegah gaya global dari chatgpt1 mempengaruhi chatgpt2 */
+#chatgpt1-wrapper *,
+#chatgpt1-wrapper *::before,
+#chatgpt1-wrapper *::after {
+    all: unset;
+    box-sizing: border-box;
+}
+
+/* Menyesuaikan tema agar tidak bentrok */
+#chatgpt1-wrapper [data-theme="dark"],
+#chatgpt1-wrapper [data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9f9f9;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --accent-color: #3498db;
+}
+
+/* Pastikan layout chatgpt1 tetap stabil */
+#chatgpt1-wrapper body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Mengisolasi section dari chatgpt1 */
+#chatgpt1-wrapper section {
+    padding: 2rem;
+    background: transparent;
+}
+
+/* Memastikan elemen skill dan experience tidak bentrok */
+#chatgpt1-wrapper .skills,
+#chatgpt1-wrapper .experience {
+    background: var(--bg-secondary);
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Mencegah elemen tombol mengubah posisi global */
+#chatgpt1-wrapper .theme-toggle,
+#chatgpt1-wrapper .back-to-top {
+    position: static;
+    display: block;
+    margin: 10px auto;
+}
+
+/* Pastikan navbar chatgpt1 tidak mengubah navbar chatgpt2 */
+#chatgpt1-wrapper nav {
+    position: relative;
+    background: var(--bg-primary);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
