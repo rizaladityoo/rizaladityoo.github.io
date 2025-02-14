@@ -42,7 +42,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url('../assets/img/portfolio/panorama.jpg');
+    background-image: url('https://raw.githubusercontent.com/rizaladityoo/rizaladityoo.github.io/refs/heads/master/assets/img/portfolio/panorama.jpg');
 }
 
 .parallax-header::before {
@@ -756,10 +756,14 @@ section {
         max-width: 400px;
         margin: 0 auto;
     }
-}
+    }
     .about-content {
-        flex-direction: column;
-        gap: 2rem;
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 3.5rem;
+        align-items: start;
+        max-width: 1200px;
+        margin: 0 auto;
     }
 
     .about-image {
